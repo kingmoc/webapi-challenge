@@ -20,28 +20,28 @@ let chores = [
         description: "Clean House",
         notes: "",
         assignedTo: 1,
-        completed: false
+        completed: 'false'
     },
     {
         id: 2,
         description: "Mow the Lawn",
         notes: "",
         assignedTo: 1,
-        completed: false
+        completed: 'false'
     },
     {
         id: 3,
         description: "Write Daily Journal",
         notes: "",
         assignedTo: 2,
-        completed: false
+        completed: 'false'
     },
     {
         id: 4,
         description: "Life Live to the Fullest",
         notes: "",
         assignedTo: 2,
-        completed: false
+        completed: 'true'
     }
 ]
 
@@ -53,8 +53,20 @@ server.get('/chores', (req, res) => {
     const queryParameters = req.query;
     console.log(queryParameters)
 
+    if(queryParameters.completed === 'true') {
+        let com = chores.filter(chore => chore.completed === 'true')
+        res.status(200).json(com)
+        console.log("Right")
+    } else if (queryParameters.completed === 'false') {
+        let notCom = chores.filter(chore => chore.completed === 'false')
+        res.status(200).json(notCom)
+        console.log("Wrong")
+    } else {
+        res.status(200).json(chores)
+    }
 
-    res.status(200).json(chores)
+    
+
 })
 
 server.post('/chores', (req, res) => {
