@@ -73,9 +73,16 @@ server.post('/chores', (req, res) => {
     const newChore = req.body
     newChore.id = chores.length + 1
 
-    chores = [...chores, newChore]
+    let checkPerson = people.filter(person => person.id === parseInt(newChore.assignedTo))
 
-    res.status(200).json(newChore)
+    if (checkPerson.length === 0) {
+        res.status(404).json({error: "ID does NOT exist"})
+    } else {
+        chores = [...chores, newChore]
+    
+        res.status(200).json(newChore)
+    }
+
 })
 
 server.put('/chores/:id', (req, res) => {
