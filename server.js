@@ -51,7 +51,7 @@ server.use(express.json())
 
 server.get('/chores', (req, res) => {
     const queryParameters = req.query;
-    console.log(queryParameters)
+    // console.log(queryParameters)
 
     if(queryParameters.completed === 'true') {
         let com = chores.filter(chore => chore.completed === 'true')
@@ -89,6 +89,7 @@ server.put('/chores/:id', (req, res) => {
     const choreId = parseInt(req.params.id)
     const choreUpdate = req.body
     choreUpdate.id = choreId
+    console.log(choreUpdate)
 
     let updatedChores = chores.map((chore,i) => {
         if(chore.id === choreId) {
@@ -96,9 +97,9 @@ server.put('/chores/:id', (req, res) => {
             console.log("rightID")
             return chore = choreUpdate
         }
-        // else {
-        //     res.status(404).json({ errror: "ID Not Found"})
-        // }
+        else {
+            return chore
+        }
     })
 
     chores = updatedChores
