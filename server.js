@@ -114,9 +114,14 @@ server.delete('/chores/:id', (req, res) => {
 server.get('/chores/person/:id', (req, res) => {
     const choreId = parseInt(req.params.id)
 
-    let personList = chores.filter(chore => chore.assignedTo === choreId)
-
-    res.status(200).json(personList)
+    let checkPerson = people.filter(person => person.id === choreId)
+    // console.log(checkPerson)
+    if (checkPerson.length === 0) {
+        res.status(404).json({error: "ID does NOT exist"})
+    } else {
+        let personList = chores.filter(chore => chore.assignedTo === choreId)
+        res.status(200).json(personList)
+    }
 
 })
 
