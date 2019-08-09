@@ -4,47 +4,44 @@ let people = [
     {
         id: 1,
         name: "Joseph",
-        chores: [
-            {
-                id: 1,
-                description: "Clean House",
-                notes: "",
-                assignedTo: 1,
-                completed: false
-            },
-            {
-                id: 2,
-                description: "Mow the Lawn",
-                notes: "",
-                assignedTo: 1,
-                completed: false
-            }
-        ]
     },
     {   id: 2,
         name: "Kate",
-        chores: [
-            {
-                id: 1,
-                description: "Write Daily Journal",
-                notes: "",
-                assignedTo: 2,
-                completed: false
-            }
-        ]
     },
     {
         id: 3,
         name: "Ajalina",
-        chores: [
-            {
-                id: 1,
-                description: "Do Homework",
-                notes: "",
-                assignedTo: 3,
-                completed: false
-            }
-        ]
+    }
+]
+
+let chores = [
+    {
+        id: 1,
+        description: "Clean House",
+        notes: "",
+        assignedTo: 1,
+        completed: false
+    },
+    {
+        id: 2,
+        description: "Mow the Lawn",
+        notes: "",
+        assignedTo: 1,
+        completed: false
+    },
+    {
+        id: 3,
+        description: "Write Daily Journal",
+        notes: "",
+        assignedTo: 2,
+        completed: false
+    },
+    {
+        id: 4,
+        description: "Life Live to the Fullest",
+        notes: "",
+        assignedTo: 2,
+        completed: false
     }
 ]
 
@@ -52,9 +49,65 @@ let people = [
 const server = express();
 server.use(express.json())
 
-server.get('/', (req, res) => {
-    res.status(200).json({message: "Running"})
+server.get('/chores', (req, res) => {
+    const queryParameters = req.query;
+    console.log(queryParameters)
+
+
+    res.status(200).json(chores)
 })
+
+server.post('/chores', (req, res) => {
+    const newChore = req.body
+    newChore.id = chores.length + 1
+
+    chores = [...chores, newChore]
+
+    res.status(200).json(newChore)
+})
+
+server.put('/chores/:id', (req, res) => {
+    const choreId = parseInt(req.params.id)
+    const choreUpdate = req.body
+    choreUpdate.id = choreId
+
+    let updatedChores = chores.map((chore,i) => {
+        if(chore.id === choreId) {
+
+            console.log("rightID")
+            return chore = choreUpdate
+        }
+        // else {
+        //     res.status(404).json({ errror: "ID Not Found"})
+        // }
+    })
+
+    chores = updatedChores
+    res.status(201).json({ message: "Updated Successfully"})
+})
+
+server.delete('/chores/:id', (req, res) => {
+    const choreId = parseInt(req.params.id)
+    // console.log(choreId)
+
+    let newChores = chores.filter(chore => chore.id !== choreId)   
+    console.log(newChores) 
+
+    chores = newChores    
+
+    res.status(204).end()
+
+})
+
+server.get('/chores/person/:id', (req, res) => {
+    const choreId = parseInt(req.params.id)
+
+    let personList = chores.filter(chore => chore.assignedTo === choreId)
+
+    res.status(200).json(personList)
+
+})
+
 
 module.exports = server;
 
